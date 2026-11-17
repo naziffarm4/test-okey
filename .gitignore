@@ -1,0 +1,24 @@
+# Binary packages and archives (never commit original APK/XAPK files)
+*.apk
+*.xapk
+*.aab
+*.dex
+*.so
+*.zip
+
+# Keys, certificates, tokens, and secrets
+*.keystore
+*.jks
+*.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+
+# Temporary / analysis caches
+scratch/
+temp/
+*.tmp
+*.bak
+*.log
