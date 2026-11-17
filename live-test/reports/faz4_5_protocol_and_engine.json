@@ -1,0 +1,146 @@
+{
+  "mock_http_signing": {
+    "valid_status": 200,
+    "tampered_status": 403
+  },
+  "mock_dual_channel_session": {
+    "guest_login_ok": true,
+    "eio_open_ok": true,
+    "sio_connect_ok": true,
+    "ping_pong_ok": true,
+    "ping_rtt_ms": 1.562,
+    "push_i_event_ok": true,
+    "disconnect_ok": true
+  },
+  "schema_validations": {
+    "http_guest_login_cmd": {
+      "valid": true,
+      "mode": "pre_auth"
+    },
+    "http_draw_tile_cmd": {
+      "valid": true,
+      "mode": "in_session"
+    },
+    "server_batch_response": {
+      "valid": true,
+      "count": 1
+    },
+    "events": {
+      "OnIstakayiGuncelle": {
+        "valid": true,
+        "event": "OnIstakayiGuncelle"
+      },
+      "OnMasaTaslariGuncelle": {
+        "valid": true,
+        "event": "OnMasaTaslariGuncelle"
+      },
+      "OnTasCek": {
+        "valid": true,
+        "event": "OnTasCek"
+      },
+      "OnTasAt": {
+        "valid": true,
+        "event": "OnTasAt"
+      },
+      "SiraGeldi_Derived": {
+        "valid": true,
+        "event": "SiraGeldi_Derived"
+      },
+      "OnOyunBitir": {
+        "valid": true,
+        "event": "OnOyunBitir"
+      },
+      "OnOyunBitirHata": {
+        "valid": true,
+        "event": "OnOyunBitirHata"
+      }
+    }
+  },
+  "okey_engine_simulation": {
+    "indicator_tile": "4-k-4",
+    "active_okey_key": "k-5",
+    "input_15_tiles": [
+      "1-k-1",
+      "2-k-2",
+      "3-k-3",
+      "14-m-1",
+      "15-m-2",
+      "16-m-3",
+      "27-s-7",
+      "40-y-7",
+      "66-k-7",
+      "20-m-7",
+      "30-s-10",
+      "31-s-11",
+      "32-s-12",
+      "33-s-13",
+      "5-k-5"
+    ],
+    "akilli_diz": {
+      "melds": [
+        [
+          "1-k-1",
+          "2-k-2",
+          "3-k-3"
+        ],
+        [
+          "14-m-1",
+          "15-m-2",
+          "16-m-3"
+        ],
+        [
+          "27-s-7",
+          "40-y-7",
+          "66-k-7",
+          "20-m-7"
+        ],
+        [
+          "30-s-10",
+          "31-s-11",
+          "32-s-12",
+          "33-s-13"
+        ]
+      ],
+      "leftover": [
+        "5-k-5"
+      ],
+      "kalan_toplam": 0,
+      "rack_28": [
+        "1",
+        "2",
+        "3",
+        "Bos",
+        "14",
+        "15",
+        "16",
+        "Bos",
+        "27",
+        "40",
+        "66",
+        "20",
+        "Bos",
+        "Bos",
+        "30",
+        "31",
+        "32",
+        "33",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "5"
+      ]
+    },
+    "okey_ile_bit_command": {
+      "taslar": "-1-2-3-Bos-14-15-16-Bos-27-40-66-20-Bos-Bos-30-31-32-33-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos",
+      "bitentas": "5",
+      "_i": "masaoyunbitir-oyunbitirbeta",
+      "_t": "[REDACTED]"
+    }
+  }
+}

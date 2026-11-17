@@ -1,0 +1,100 @@
+{
+  "envelopes": {
+    "http_guest_login_cmd": {
+      "token_id": "",
+      "device_id": "test-device-0001",
+      "machash": "d41d8cd98f00b204e9800998ecf8427e",
+      "_e": "giris-misafir"
+    },
+    "http_draw_tile_cmd": {
+      "tip": "o",
+      "dc": "0",
+      "_i": "masatascek-tascek",
+      "_t": "mock-session-001"
+    },
+    "server_batch_response": {
+      "s": [
+        {
+          "i": "VersiyonKontrol",
+          "d": {}
+        }
+      ]
+    }
+  },
+  "events": {
+    "OnIstakayiGuncelle": {
+      "t": "1-k-1,2-k-2,3-k-3,14-m-1,15-m-2,16-m-3,27-s-7,40-y-7,66-k-7,30-s-10,31-s-11,32-s-12,45-y-6,5-k-5,52-y-13"
+    },
+    "OnMasaTaslariGuncelle": {
+      "mid": "21",
+      "kt": "46",
+      "ot": "4-k-4",
+      "ok": "k-5",
+      "ms": "1",
+      "yt": "1",
+      "el": "1",
+      "es": "0",
+      "cn": "1200000",
+      "rx": "0",
+      "tc": "0",
+      "cl": "0",
+      "is_tournament": "0",
+      "current_round": "1"
+    },
+    "OnTasCek": {
+      "tas": "5-k-5",
+      "yon": "1",
+      "tip": "o",
+      "kt": "45",
+      "tc": "0",
+      "dc": "0",
+      "cl": "0"
+    },
+    "OnTasAt": {
+      "tas": "52-y-13",
+      "yon": "1",
+      "ms": "2",
+      "tc": "0",
+      "cl": "0"
+    },
+    "SiraGeldi_Derived": {
+      "Sira": 2,
+      "sure": 15.0
+    },
+    "OnOyunBitir": {
+      "Baslik": "Okey İle Bitti",
+      "BitenTas": "5-k-5",
+      "CanakKirildi": "1",
+      "Kazananlar": [
+        {
+          "id": "1001",
+          "i": "TestOyuncu",
+          "p": "400",
+          "a": "1",
+          "v": "0"
+        }
+      ],
+      "Taslar": [
+        "1-k-1",
+        "2-k-2",
+        "3-k-3",
+        "Bos",
+        "14-m-1",
+        "15-m-2",
+        "16-m-3"
+      ]
+    },
+    "OnOyunBitirHata": {
+      "hata": [
+        {
+          "Per": 0,
+          "Tip": "GecersizPer",
+          "Taslar": [
+            "45-y-6",
+            "52-y-13"
+          ]
+        }
+      ]
+    }
+  }
+}

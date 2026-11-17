@@ -22,3 +22,6 @@ temp/
 *.tmp
 *.bak
 *.log
+__pycache__/
+*.py[cod]
+.pytest_cache/

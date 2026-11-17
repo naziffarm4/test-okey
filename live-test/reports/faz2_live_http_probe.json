@@ -1,0 +1,92 @@
+{
+  "target_url": "https://sistem.okeymuhabbet.com/",
+  "host": "sistem.okeymuhabbet.com",
+  "port": 443,
+  "dns": {
+    "resolved": true,
+    "addresses": [
+      "185.33.130.138"
+    ],
+    "duration_ms": 23.01
+  },
+  "tcp": {
+    "connected": true,
+    "remote_ip": "185.33.130.138",
+    "remote_port": 443,
+    "duration_ms": 27.37
+  },
+  "tls": {
+    "verified": true,
+    "protocol_version": "TLSv1.3",
+    "cipher": [
+      "TLS_AES_256_GCM_SHA384",
+      "TLSv1.3",
+      256
+    ],
+    "subject": {
+      "commonName": "*.okeymuhabbet.com"
+    },
+    "issuer": {
+      "countryName": "US",
+      "stateOrProvinceName": "Arizona",
+      "localityName": "Scottsdale",
+      "organizationName": "GoDaddy.com, Inc.",
+      "organizationalUnitName": "http://certs.godaddy.com/repository/",
+      "commonName": "Go Daddy Secure Certificate Authority - G2"
+    },
+    "not_before": "Jan 16 13:26:18 2026 GMT",
+    "not_after": "Feb  4 17:14:20 2027 GMT",
+    "san_dns": [
+      "*.okeymuhabbet.com",
+      "okeymuhabbet.com"
+    ],
+    "duration_ms": 30.733
+  },
+  "http_head": {
+    "status_code": 200,
+    "duration_ms": 79.405,
+    "content_type": "text/html; charset=UTF-8",
+    "headers": {
+      "server": "nginx/1.21.5",
+      "date": "Tue, 17 Nov 2026 09:29:02 GMT",
+      "content-type": "text/html; charset=UTF-8",
+      "connection": "close",
+      "set-cookie": "[REDACTED]",
+      "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+      "cache-control": "no-store, no-cache, must-revalidate",
+      "pragma": "no-cache",
+      "access-control-allow-origin": "*",
+      "access-control-max-age": "3600",
+      "access-control-expose-headers": "Content-Length",
+      "access-control-allow-headers": "Range"
+    },
+    "body_byte_length": 0,
+    "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "body_structure": "empty_body",
+    "body_safe_excerpt": ""
+  },
+  "http_get": {
+    "status_code": 200,
+    "duration_ms": 48.896,
+    "content_type": "text/html; charset=UTF-8",
+    "headers": {
+      "server": "nginx/1.21.5",
+      "date": "Tue, 17 Nov 2026 09:29:03 GMT",
+      "content-type": "text/html; charset=UTF-8",
+      "transfer-encoding": "chunked",
+      "connection": "close",
+      "set-cookie": "[REDACTED]",
+      "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+      "cache-control": "no-store, no-cache, must-revalidate",
+      "pragma": "no-cache",
+      "access-control-allow-origin": "*",
+      "access-control-max-age": "3600",
+      "access-control-expose-headers": "Content-Length",
+      "access-control-allow-headers": "Range"
+    },
+    "body_byte_length": 0,
+    "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "body_structure": "empty_body",
+    "body_safe_excerpt": ""
+  }
+}
