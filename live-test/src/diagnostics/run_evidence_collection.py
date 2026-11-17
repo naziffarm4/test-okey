@@ -13,6 +13,7 @@ from src.diagnostics.recorder import EvidenceRecorder, sanitize_data
 from src.http.probe import LocalMockHttpServer, run_safe_production_http_probe, send_signed_command
 from src.protocol.schemas import (
     OkeyRackEngine,
+    Rack28Model,
     Tas,
     validate_event_payload,
     validate_http_command_envelope,
@@ -234,12 +235,50 @@ def main() -> int:
         "5-k-5",
     ]
     hand_tiles = [Tas.from_wire(w, okey_key="k-5") for w in hand_wires]
-    akilli_res = OkeyRackEngine.akilli_diz(hand_tiles, okey_key="k-5")
+    user_rack = Rack28Model.from_tiles(hand_tiles)
+    before_rack = user_rack.to_slot_ids()
+    alternatives = OkeyRackEngine.suggest_alternatives(user_rack, okey_key="k-5")
+    non_destructive_ok = user_rack.to_slot_ids() == before_rack
+
+    akilli_res = alternatives["per_alternative"]
     finish_cmd = OkeyRackEngine.build_okey_ile_bit_command(
         tiles=hand_tiles,
         okey_key="k-5",
         session_id="mock-sess-1001",
     )
+
+    pair_hand_wires = [
+        "1-k-1", "54-k-1",
+        "14-m-2", "67-m-2",
+        "27-s-3", "80-s-3",
+        "40-y-4", "93-y-4",
+        "10-k-10", "63-k-10",
+        "25-m-12", "78-m-12",
+        "53-o-0", "106-o-0",
+        "58-k-5",
+    ]
+    pair_tiles = [Tas.from_wire(w, okey_key="k-5") for w in pair_hand_wires]
+    cift_res = OkeyRackEngine.akilli_diz(pair_tiles[:-1], okey_key="k-5", mode="cift")
+    pair_finish_cmd = OkeyRackEngine.build_okey_ile_bit_command(
+        tiles=pair_tiles,
+        okey_key="k-5",
+        session_id="mock-sess-1001",
+    )
+    fake_okey_rejected = (
+        OkeyRackEngine.build_okey_ile_bit_command(
+            tiles=[Tas.from_wire(w, okey_key="k-5") for w in (hand_wires[:-1] + ["53-o-0"])],
+            okey_key="k-5",
+            session_id="mock-sess-1001",
+        )
+        is None
+    )
+    with LocalMockHttpServer(expected_salt="SYNTHETIC_HTTP_16") as fin_mock:
+        mock_fin_ok = send_signed_command(
+            base_url=fin_mock.base_url,
+            payload=finish_cmd or {},
+            session_id="mock-sess-1001",
+            salt="SYNTHETIC_HTTP_16",
+        )
     eng_ms = round((time.perf_counter() - t_eng) * 1000.0, 3)
 
     faz45_payload = sanitize_data(
@@ -251,8 +290,13 @@ def main() -> int:
                 "indicator_tile": "4-k-4",
                 "active_okey_key": "k-5",
                 "input_15_tiles": hand_wires,
+                "non_destructive_preview_verified": non_destructive_ok,
                 "akilli_diz": akilli_res,
+                "akilli_diz_7_pairs": cift_res,
                 "okey_ile_bit_command": finish_cmd,
+                "okey_ile_bit_7_pairs_command": pair_finish_cmd,
+                "fake_okey_finish_rejected": fake_okey_rejected,
+                "mock_server_finish_event": mock_fin_ok["json"]["s"][0]["i"] if mock_fin_ok["json"] else None,
             },
         }
     )

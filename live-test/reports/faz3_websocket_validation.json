@@ -5,11 +5,11 @@
     "dns_addresses": [
       "185.33.130.138"
     ],
-    "dns_duration_ms": 0.649,
+    "dns_duration_ms": 1.025,
     "tcp_connected": true,
     "remote_ip": "185.33.130.138",
     "remote_port": 4082,
-    "tcp_handshake_ms": 14.592,
+    "tcp_handshake_ms": 14.174,
     "app_bytes_sent": 0,
     "app_protocol_status": "ENGELLENDİ_NO_WRITTEN_AUTHORIZATION"
   },
@@ -20,16 +20,16 @@
   "local_mock_ws_eio4": {
     "http_upgrade_status": 101,
     "sec_websocket_accept_valid": true,
-    "handshake_ms": 22.176,
+    "handshake_ms": 2.46,
     "eio4_open_packet": "0{\"sid\":\"eio_mock_01\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":20000}",
     "rx_ping_packet": "2",
     "pong_verified": true,
-    "ping_pong_rtt_ms": 0.459,
+    "ping_pong_rtt_ms": 0.805,
     "reconnect_recovery": {
       "connected": true,
       "attempts": 2,
       "handshake": "[REDACTED]",
-      "total_recovery_ms": 69.117
+      "total_recovery_ms": 64.275
     }
   }
 }

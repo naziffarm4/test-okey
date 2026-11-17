@@ -8,7 +8,7 @@
     "eio_open_ok": true,
     "sio_connect_ok": true,
     "ping_pong_ok": true,
-    "ping_rtt_ms": 1.562,
+    "ping_rtt_ms": 0.727,
     "push_i_event_ok": true,
     "disconnect_ok": true
   },
@@ -76,7 +76,9 @@
       "33-s-13",
       "5-k-5"
     ],
+    "non_destructive_preview_verified": true,
     "akilli_diz": {
+      "mode": "per",
       "melds": [
         [
           "1-k-1",
@@ -136,11 +138,115 @@
         "5"
       ]
     },
+    "akilli_diz_7_pairs": {
+      "mode": "cift",
+      "pairs": [
+        [
+          "1-k-1",
+          "54-k-1"
+        ],
+        [
+          "14-m-2",
+          "67-m-2"
+        ],
+        [
+          "27-s-3",
+          "80-s-3"
+        ],
+        [
+          "40-y-4",
+          "93-y-4"
+        ],
+        [
+          "10-k-10",
+          "63-k-10"
+        ],
+        [
+          "25-m-12",
+          "78-m-12"
+        ],
+        [
+          "53-o-0",
+          "106-o-0"
+        ]
+      ],
+      "melds": [
+        [
+          "1-k-1",
+          "54-k-1"
+        ],
+        [
+          "14-m-2",
+          "67-m-2"
+        ],
+        [
+          "27-s-3",
+          "80-s-3"
+        ],
+        [
+          "40-y-4",
+          "93-y-4"
+        ],
+        [
+          "10-k-10",
+          "63-k-10"
+        ],
+        [
+          "25-m-12",
+          "78-m-12"
+        ],
+        [
+          "53-o-0",
+          "106-o-0"
+        ]
+      ],
+      "cift_sayisi": 7,
+      "leftover": [],
+      "kalan_toplam": 0,
+      "rack_28": [
+        "1",
+        "54",
+        "Bos",
+        "14",
+        "67",
+        "Bos",
+        "27",
+        "80",
+        "Bos",
+        "40",
+        "93",
+        "Bos",
+        "10",
+        "63",
+        "25",
+        "78",
+        "Bos",
+        "53",
+        "106",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos",
+        "Bos"
+      ]
+    },
     "okey_ile_bit_command": {
       "taslar": "-1-2-3-Bos-14-15-16-Bos-27-40-66-20-Bos-Bos-30-31-32-33-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos",
       "bitentas": "5",
       "_i": "masaoyunbitir-oyunbitirbeta",
       "_t": "[REDACTED]"
-    }
+    },
+    "okey_ile_bit_7_pairs_command": {
+      "taslar": "-1-54-Bos-14-67-Bos-27-80-Bos-40-93-Bos-10-63-25-78-Bos-53-106-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos",
+      "bitentas": "58",
+      "_i": "masaoyunbitir-oyunbitirbeta",
+      "_t": "[REDACTED]"
+    },
+    "fake_okey_finish_rejected": true,
+    "mock_server_finish_event": "OyunBitir"
   }
 }

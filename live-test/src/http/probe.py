@@ -161,6 +161,35 @@ class LocalMockHttpServer:
                     }
                 elif route == "versiyonkontrol-versiyonkontrol":
                     resp = {"s": [{"i": "VersiyonOnay", "d": {"durum": 1, "versiyon": cmd.get("Versiyon", "3.1.33")}}]}
+                elif route == "masaoyunbitir-oyunbitirbeta":
+                    taslar_str = str(cmd.get("taslar", ""))
+                    biten = str(cmd.get("bitentas", ""))
+                    tokens = taslar_str.lstrip("-").split("-") if taslar_str.startswith("-") else []
+                    occupied = [tok for tok in tokens if tok != "Bos"]
+                    if len(tokens) == 28 and len(occupied) == 14 and len(set(occupied)) == 14 and biten and biten not in occupied:
+                        resp = {
+                            "s": [
+                                {
+                                    "i": "OyunBitir",
+                                    "d": {
+                                        "Baslik": "Okey İle Bitti (LOCAL_MOCK)",
+                                        "BitenTas": biten,
+                                        "CanakKirildi": "1",
+                                        "Kazananlar": [{"id": "1001", "i": "MockOyuncu", "p": "400", "a": "1", "v": "0"}],
+                                        "Taslar": tokens,
+                                    },
+                                }
+                            ]
+                        }
+                    else:
+                        resp = {
+                            "s": [
+                                {
+                                    "i": "OyunBitirHata",
+                                    "d": {"hata": [{"Per": 0, "Tip": "GecersizDizilim", "Taslar": occupied[:3]}]},
+                                }
+                            ]
+                        }
                 else:
                     resp = {"s": [{"i": "MockAck", "d": {"route": route, "ok": 1}}]}
                 self._reply(200, resp)

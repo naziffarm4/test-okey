@@ -111,11 +111,79 @@ class Tas:
         return c, int(n)
 
 
+class Rack28Model:
+    """
+    28-slot Okey rack model (Slots 0..13 upper row, 14..27 lower row).
+    Enforces unique physical TasID invariant and supports non-destructive snapshots.
+    """
+
+    SLOT_COUNT = 28
+
+    def __init__(self, slots: list[Tas | None] | None = None) -> None:
+        if slots is None:
+            self._slots: list[Tas | None] = [None] * self.SLOT_COUNT
+        else:
+            if len(slots) != self.SLOT_COUNT:
+                raise ValueError(f"Rack requires exactly {self.SLOT_COUNT} slots, got {len(slots)}")
+            seen: set[str] = set()
+            for t in slots:
+                if t is not None:
+                    if t.tas_id in seen:
+                        raise ValueError(f"Duplicate TasID {t.tas_id!r} on rack")
+                    seen.add(t.tas_id)
+            self._slots = list(slots)
+
+    @classmethod
+    def from_tiles(cls, tiles: list[Tas], positions: list[int] | None = None) -> Rack28Model:
+        slots: list[Tas | None] = [None] * cls.SLOT_COUNT
+        if positions is None:
+            if len(tiles) > cls.SLOT_COUNT:
+                raise ValueError("Too many tiles for 28-slot rack")
+            for idx, t in enumerate(tiles):
+                slots[idx] = t
+        else:
+            if len(positions) != len(tiles):
+                raise ValueError("positions length must match tiles length")
+            for pos, t in zip(positions, tiles):
+                if not (0 <= pos < cls.SLOT_COUNT) or slots[pos] is not None:
+                    raise ValueError(f"Invalid or colliding rack slot index: {pos}")
+                slots[pos] = t
+        return cls(slots)
+
+    def clone(self) -> Rack28Model:
+        return Rack28Model(list(self._slots))
+
+    def tiles(self) -> list[Tas]:
+        return [t for t in self._slots if t is not None]
+
+    def move_tile(self, src_slot: int, dst_slot: int) -> None:
+        if not (0 <= src_slot < self.SLOT_COUNT and 0 <= dst_slot < self.SLOT_COUNT):
+            raise IndexError("Slot index out of 0..27 range")
+        self._slots[src_slot], self._slots[dst_slot] = self._slots[dst_slot], self._slots[src_slot]
+
+    def to_slot_ids(self) -> list[str]:
+        return [t.tas_id if t is not None else "Bos" for t in self._slots]
+
+    def to_oyunbitir_wire(self) -> str:
+        """Matches Masa::OyunBitir @ RVA 0x019FF938: '-' + 28 '-' separated TasID/'Bos' tokens."""
+        return "-" + "-".join(self.to_slot_ids())
+
+
 class OkeyRackEngine:
     """
-    Implements Akıllı Diz (MasaPerHesaplayici @ RVA 0x01A09D98) and
-    Okey ile Bit 28-slot rack serializer (Masa::OyunBitir @ RVA 0x019FF938 -> OyunBitirBeta @ RVA 0x019B7BEC).
+    Implements Akıllı Diz (MasaPerHesaplayici @ RVA 0x01A09D98, both Per and Çift modes,
+    non-destructive alternative preview, disjoint tile invariant) and Okey ile Bit 28-slot
+    serializer (Masa::OyunBitir @ RVA 0x019FF938 -> OyunBitirBeta @ RVA 0x019B7BEC).
     """
+
+    @staticmethod
+    def assert_disjoint_tile_usage(input_tiles: list[Tas], grouped: list[list[Tas]], leftover: list[Tas]) -> None:
+        expected_ids = [t.tas_id for t in input_tiles]
+        if len(set(expected_ids)) != len(expected_ids):
+            raise ValueError("Input hand contains duplicate physical TasID")
+        used_ids = [t.tas_id for grp in grouped for t in grp] + [t.tas_id for t in leftover]
+        if len(used_ids) != len(set(used_ids)) or set(used_ids) != set(expected_ids):
+            raise ValueError("Tile reuse or loss detected across combinations")
 
     @staticmethod
     def _is_valid_meld(non_jokers: list[tuple[str, int]], joker_count: int) -> bool:
@@ -132,24 +200,88 @@ class OkeyRackEngine:
             if len(nums) == 1 and len(set(colors)) == len(colors) and all(c in COLORS for c in colors):
                 return True
 
-        # Candidate 2: Same-color Run (length 3..13, consecutive numbers; 1 may follow 13 as 14, not 13-1-2)
+        # Candidate 2: Same-color Run (length 3..13, consecutive numbers; 1 may follow 13 as 14, never 13-1-2)
         colors_set = {c for c, _ in non_jokers}
         if len(colors_set) == 1 and next(iter(colors_set)) in COLORS and total <= 13:
             raw_nums = [n for _, n in non_jokers]
             for ace_high in (False, True):
+                if ace_high and 1 not in raw_nums:
+                    continue
                 mapped = [14 if (ace_high and n == 1) else n for n in raw_nums]
                 if len(set(mapped)) != len(mapped):
                     continue
                 lo, hi = min(mapped), max(mapped)
+                if ace_high and lo == 2:
+                    # Rejects 13-1-2 wraparound when mapped has 2..14 span > total
+                    pass
                 max_bound = 14 if ace_high else 13
-                if hi - lo + 1 <= total and (hi - lo + 1 - len(mapped)) <= joker_count:
-                    # Ensure enough room inside 1..max_bound for remaining jokers
-                    if total <= max_bound:
+                min_bound = 2 if ace_high else 1
+                span = hi - lo + 1
+                if span <= total and (span - len(mapped)) <= joker_count:
+                    # Total window of length `total` must fit inside [min_bound, max_bound]
+                    if total <= (max_bound - min_bound + 1):
                         return True
         return False
 
     @classmethod
-    def akilli_diz(cls, tiles: list[Tas], okey_key: str) -> dict[str, Any]:
+    def akilli_diz_cift(cls, tiles: list[Tas], okey_key: str) -> dict[str, Any]:
+        """Calculates optimal pair (Çift) arrangement using identical color+number pairs + wild Okey jokers."""
+        if len({t.tas_id for t in tiles}) != len(tiles):
+            raise ValueError("Duplicate physical TasID in hand")
+
+        jokers = [t for t in tiles if t.is_okey_joker()]
+        regulars = [t for t in tiles if not t.is_okey_joker()]
+
+        by_key: dict[str, list[Tas]] = {}
+        for t in regulars:
+            by_key.setdefault(t.effective_key(okey_key), []).append(t)
+
+        pairs: list[list[Tas]] = []
+        singles: list[Tas] = []
+        for grp in by_key.values():
+            idx = 0
+            while idx + 1 < len(grp):
+                pairs.append([grp[idx], grp[idx + 1]])
+                idx += 2
+            if idx < len(grp):
+                singles.append(grp[idx])
+
+        # Pair highest-point singles with wild Okey jokers first to minimize kalan_toplam
+        singles.sort(key=lambda t: t.effective_color_num(okey_key)[1], reverse=True)
+        rem_jokers = list(jokers)
+        paired_single_ids: set[str] = set()
+        for s_tile in singles:
+            if not rem_jokers:
+                break
+            j_tile = rem_jokers.pop(0)
+            pairs.append([s_tile, j_tile])
+            paired_single_ids.add(s_tile.tas_id)
+
+        while len(rem_jokers) >= 2:
+            pairs.append([rem_jokers.pop(0), rem_jokers.pop(0)])
+
+        leftover = [s for s in singles if s.tas_id not in paired_single_ids] + rem_jokers
+        cls.assert_disjoint_tile_usage(tiles, pairs, leftover)
+
+        kalan_toplam = sum(0 if t.is_okey_joker() else t.effective_color_num(okey_key)[1] for t in leftover)
+        rack_28 = cls._pack_to_28_slots(pairs, leftover)
+        return {
+            "mode": "cift",
+            "pairs": [[t.tas_adi for t in grp] for grp in pairs],
+            "melds": [[t.tas_adi for t in grp] for grp in pairs],
+            "cift_sayisi": len(pairs),
+            "leftover": [t.tas_adi for t in leftover],
+            "kalan_toplam": kalan_toplam,
+            "rack_28": rack_28,
+        }
+
+    @classmethod
+    def akilli_diz(cls, tiles: list[Tas], okey_key: str, mode: str = "per") -> dict[str, Any]:
+        if mode == "cift":
+            return cls.akilli_diz_cift(tiles, okey_key=okey_key)
+        if len({t.tas_id for t in tiles}) != len(tiles):
+            raise ValueError("Duplicate physical TasID in hand")
+
         n = len(tiles)
         eff = [None if t.is_okey_joker() else t.effective_color_num(okey_key) for t in tiles]
         points = [0 if t.is_okey_joker() else t.effective_color_num(okey_key)[1] for t in tiles]
@@ -196,12 +328,35 @@ class OkeyRackEngine:
             melds_tiles.append(group)
 
         leftover = [tiles[i] for i in range(n) if not (used_all & (1 << i))]
+        cls.assert_disjoint_tile_usage(tiles, melds_tiles, leftover)
         rack_28 = cls._pack_to_28_slots(melds_tiles, leftover)
         return {
+            "mode": "per",
             "melds": [[t.tas_adi for t in grp] for grp in melds_tiles],
             "leftover": [t.tas_adi for t in leftover],
             "kalan_toplam": best_sum,
             "rack_28": rack_28,
+        }
+
+    @classmethod
+    def suggest_alternatives(cls, rack: Rack28Model, okey_key: str) -> dict[str, Any]:
+        """
+        Computes Seri/Renk ('per') and Pair ('cift') arrangements on a cloned snapshot
+        without mutating the user's existing 28-slot rack layout.
+        """
+        original_snapshot = rack.to_slot_ids()
+        hand_tiles = rack.clone().tiles()
+        per_plan = cls.akilli_diz(hand_tiles, okey_key=okey_key, mode="per")
+        cift_plan = cls.akilli_diz(hand_tiles, okey_key=okey_key, mode="cift")
+        assert rack.to_slot_ids() == original_snapshot, "User rack must never be mutated during preview"
+        recommended = "cift" if (cift_plan["cift_sayisi"] >= 7 and cift_plan["kalan_toplam"] == 0) or (
+            cift_plan["cift_sayisi"] >= 5 and cift_plan["kalan_toplam"] < per_plan["kalan_toplam"]
+        ) else "per"
+        return {
+            "original_rack_28": original_snapshot,
+            "per_alternative": per_plan,
+            "cift_alternative": cift_plan,
+            "recommended_mode": recommended,
         }
 
     @staticmethod
@@ -239,13 +394,27 @@ class OkeyRackEngine:
     ) -> dict[str, str] | None:
         if len(tiles) != 15:
             return None
+        if len({t.tas_id for t in tiles}) != 15:
+            raise ValueError("15-tile hand contains duplicate physical TasID")
+
         for idx, candidate in enumerate(tiles):
             if not candidate.is_okey_joker():
                 continue
             rem_14 = tiles[:idx] + tiles[idx + 1 :]
-            arranged = cls.akilli_diz(rem_14, okey_key=okey_key)
-            if arranged["kalan_toplam"] == 0 and not arranged["leftover"]:
-                taslar_wire = "-" + "-".join(arranged["rack_28"])
+            # Path A: 14 tiles form valid Seri/Renk melds with 0 leftover
+            arranged_per = cls.akilli_diz(rem_14, okey_key=okey_key, mode="per")
+            if arranged_per["kalan_toplam"] == 0 and not arranged_per["leftover"]:
+                taslar_wire = "-" + "-".join(arranged_per["rack_28"])
+                return {
+                    "taslar": taslar_wire,
+                    "bitentas": candidate.tas_id,
+                    "_i": "masaoyunbitir-oyunbitirbeta",
+                    "_t": session_id,
+                }
+            # Path B: 14 tiles form 7 valid pairs (Çift bitiş + Okey ile Bit) with 0 leftover
+            arranged_cift = cls.akilli_diz(rem_14, okey_key=okey_key, mode="cift")
+            if arranged_cift["cift_sayisi"] == 7 and not arranged_cift["leftover"]:
+                taslar_wire = "-" + "-".join(arranged_cift["rack_28"])
                 return {
                     "taslar": taslar_wire,
                     "bitentas": candidate.tas_id,

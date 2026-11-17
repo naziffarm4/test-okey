@@ -7,13 +7,13 @@
     "addresses": [
       "185.33.130.138"
     ],
-    "duration_ms": 23.01
+    "duration_ms": 34.584
   },
   "tcp": {
     "connected": true,
     "remote_ip": "185.33.130.138",
     "remote_port": 443,
-    "duration_ms": 27.37
+    "duration_ms": 26.165
   },
   "tls": {
     "verified": true,
@@ -40,15 +40,15 @@
       "*.okeymuhabbet.com",
       "okeymuhabbet.com"
     ],
-    "duration_ms": 30.733
+    "duration_ms": 20.681
   },
   "http_head": {
     "status_code": 200,
-    "duration_ms": 79.405,
+    "duration_ms": 91.851,
     "content_type": "text/html; charset=UTF-8",
     "headers": {
       "server": "nginx/1.21.5",
-      "date": "Tue, 17 Nov 2026 09:29:02 GMT",
+      "date": "Tue, 17 Nov 2026 09:53:57 GMT",
       "content-type": "text/html; charset=UTF-8",
       "connection": "close",
       "set-cookie": "[REDACTED]",
@@ -67,11 +67,11 @@
   },
   "http_get": {
     "status_code": 200,
-    "duration_ms": 48.896,
+    "duration_ms": 63.215,
     "content_type": "text/html; charset=UTF-8",
     "headers": {
       "server": "nginx/1.21.5",
-      "date": "Tue, 17 Nov 2026 09:29:03 GMT",
+      "date": "Tue, 17 Nov 2026 09:53:57 GMT",
       "content-type": "text/html; charset=UTF-8",
       "transfer-encoding": "chunked",
       "connection": "close",

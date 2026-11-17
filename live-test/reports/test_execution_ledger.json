@@ -1,11 +1,11 @@
 [
   {
     "test_id": "LIVE-HTTP-01-DNS",
-    "timestamp": "2026-11-17T09:29:03.011337+00:00",
+    "timestamp": "2026-11-17T09:53:57.332178+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "DNS_A_AAAA_LOOKUP",
     "response_code": "RESOLVED",
-    "duration_ms": 23.01,
+    "duration_ms": 34.584,
     "expected": "sistem.okeymuhabbet.com resolves to >=1 IP address",
     "actual": "Resolved: ['185.33.130.138']",
     "evidence_file": "faz2_live_http_probe.json",
@@ -15,16 +15,16 @@
       "addresses": [
         "185.33.130.138"
       ],
-      "duration_ms": 23.01
+      "duration_ms": 34.584
     }
   },
   {
     "test_id": "LIVE-HTTP-02-TCP-TLS",
-    "timestamp": "2026-11-17T09:29:03.011388+00:00",
+    "timestamp": "2026-11-17T09:53:57.332238+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "TCP_443_AND_TLS_HANDSHAKE",
     "response_code": "TLSv1.3",
-    "duration_ms": 58.103,
+    "duration_ms": 46.846,
     "expected": "TCP 443 connects and TLS certificate validates against system CA store",
     "actual": "TLS=TLSv1.3 verified=True",
     "evidence_file": "faz2_live_http_probe.json",
@@ -34,7 +34,7 @@
         "connected": true,
         "remote_ip": "185.33.130.138",
         "remote_port": 443,
-        "duration_ms": 27.37
+        "duration_ms": 26.165
       },
       "tls": {
         "verified": true,
@@ -61,17 +61,17 @@
           "*.okeymuhabbet.com",
           "okeymuhabbet.com"
         ],
-        "duration_ms": 30.733
+        "duration_ms": 20.681
       }
     }
   },
   {
     "test_id": "LIVE-HTTP-03-SAFE-GET",
-    "timestamp": "2026-11-17T09:29:03.011435+00:00",
+    "timestamp": "2026-11-17T09:53:57.332314+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "HTTPS_READONLY_ROOT_GET",
     "response_code": 200,
-    "duration_ms": 48.896,
+    "duration_ms": 63.215,
     "expected": "Read-only unauthenticated GET / returns HTTP status and headers without mutating state",
     "actual": "HTTP 200 (0 bytes, empty_body)",
     "evidence_file": "faz2_live_http_probe.json",
@@ -79,11 +79,11 @@
     "details": {
       "head": {
         "status_code": 200,
-        "duration_ms": 79.405,
+        "duration_ms": 91.851,
         "content_type": "text/html; charset=UTF-8",
         "headers": {
           "server": "nginx/1.21.5",
-          "date": "Tue, 17 Nov 2026 09:29:02 GMT",
+          "date": "Tue, 17 Nov 2026 09:53:57 GMT",
           "content-type": "text/html; charset=UTF-8",
           "connection": "close",
           "set-cookie": "[REDACTED]",
@@ -102,11 +102,11 @@
       },
       "get": {
         "status_code": 200,
-        "duration_ms": 48.896,
+        "duration_ms": 63.215,
         "content_type": "text/html; charset=UTF-8",
         "headers": {
           "server": "nginx/1.21.5",
-          "date": "Tue, 17 Nov 2026 09:29:03 GMT",
+          "date": "Tue, 17 Nov 2026 09:53:57 GMT",
           "content-type": "text/html; charset=UTF-8",
           "transfer-encoding": "chunked",
           "connection": "close",
@@ -124,12 +124,12 @@
         "body_structure": "empty_body",
         "body_safe_excerpt": ""
       },
-      "probe_total_ms": 263.596
+      "probe_total_ms": 287.778
     }
   },
   {
     "test_id": "LIVE-HTTP-04-APP-CMD-GATE",
-    "timestamp": "2026-11-17T09:29:03.011479+00:00",
+    "timestamp": "2026-11-17T09:53:57.332388+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "SIGNED_APP_COMMAND_AUTHORIZATION_CHECK",
     "response_code": "ENGELLENDİ",
@@ -144,13 +144,13 @@
   },
   {
     "test_id": "LIVE-WS-01-TCP4082",
-    "timestamp": "2026-11-17T09:29:03.125686+00:00",
+    "timestamp": "2026-11-17T09:53:57.422498+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "TCP_4082_CONNECT_ZERO_BYTES",
     "response_code": "OPEN",
-    "duration_ms": 14.592,
+    "duration_ms": 14.174,
     "expected": "TCP port 4082 reachable with 0 application bytes sent",
-    "actual": "TCP connected=True to 185.33.130.138:4082 in 14.592 ms (0 bytes sent)",
+    "actual": "TCP connected=True to 185.33.130.138:4082 in 14.174 ms (0 bytes sent)",
     "evidence_file": "faz3_websocket_validation.json",
     "passed": true,
     "details": {
@@ -159,18 +159,18 @@
       "dns_addresses": [
         "185.33.130.138"
       ],
-      "dns_duration_ms": 0.649,
+      "dns_duration_ms": 1.025,
       "tcp_connected": true,
       "remote_ip": "185.33.130.138",
       "remote_port": 4082,
-      "tcp_handshake_ms": 14.592,
+      "tcp_handshake_ms": 14.174,
       "app_bytes_sent": 0,
       "app_protocol_status": "ENGELLENDİ_NO_WRITTEN_AUTHORIZATION"
     }
   },
   {
     "test_id": "LIVE-WS-02-PROD-APP-GATE",
-    "timestamp": "2026-11-17T09:29:03.125783+00:00",
+    "timestamp": "2026-11-17T09:53:57.422589+00:00",
     "environment": "PRODUCTION_SAFE_READONLY",
     "request_type": "WS_UPGRADE_EIO4_AUTHORIZATION_CHECK",
     "response_code": "ENGELLENDİ",
@@ -186,56 +186,56 @@
   },
   {
     "test_id": "MOCK-WS-03-EIO4-HANDSHAKE-PING",
-    "timestamp": "2026-11-17T09:29:03.125827+00:00",
+    "timestamp": "2026-11-17T09:53:57.422618+00:00",
     "environment": "LOCAL_MOCK",
     "request_type": "WS_101_UPGRADE_AND_EIO4_PING_PONG",
     "response_code": 101,
-    "duration_ms": 22.635,
+    "duration_ms": 3.265,
     "expected": "HTTP 101 Switching Protocols + EIO=4 0{sid} + 2/3 ping-pong",
-    "actual": "HTTP 101, accept_valid=True, pong=True (0.459 ms)",
+    "actual": "HTTP 101, accept_valid=True, pong=True (0.805 ms)",
     "evidence_file": "faz3_websocket_validation.json",
     "passed": true,
     "details": {
       "http_upgrade_status": 101,
       "sec_websocket_accept_valid": true,
-      "handshake_ms": 22.176,
+      "handshake_ms": 2.46,
       "eio4_open_packet": "0{\"sid\":\"eio_mock_01\",\"upgrades\":[],\"pingInterval\":25000,\"pingTimeout\":20000}",
       "rx_ping_packet": "2",
       "pong_verified": true,
-      "ping_pong_rtt_ms": 0.459,
+      "ping_pong_rtt_ms": 0.805,
       "reconnect_recovery": {
         "connected": true,
         "attempts": 2,
         "handshake": "[REDACTED]",
-        "total_recovery_ms": 69.117
+        "total_recovery_ms": 64.275
       }
     }
   },
   {
     "test_id": "MOCK-WS-04-RECONNECT",
-    "timestamp": "2026-11-17T09:29:03.125906+00:00",
+    "timestamp": "2026-11-17T09:53:57.422653+00:00",
     "environment": "LOCAL_MOCK",
     "request_type": "WS_DROP_AND_RECONNECT_RECOVERY",
     "response_code": 101,
-    "duration_ms": 69.117,
+    "duration_ms": 64.275,
     "expected": "Client recovers automatically after dropped initial connection",
-    "actual": "connected=True on attempt 2 in 69.117 ms",
+    "actual": "connected=True on attempt 2 in 64.275 ms",
     "evidence_file": "faz3_websocket_validation.json",
     "passed": true,
     "details": {
       "connected": true,
       "attempts": 2,
       "handshake": "[REDACTED]",
-      "total_recovery_ms": 69.117
+      "total_recovery_ms": 64.275
     }
   },
   {
     "test_id": "MOCK-HTTP-05-SIGNING",
-    "timestamp": "2026-11-17T09:29:04.198949+00:00",
+    "timestamp": "2026-11-17T09:53:59.006093+00:00",
     "environment": "LOCAL_MOCK",
     "request_type": "SIGNED_GET_MD5_VERIFICATION",
     "response_code": "200/403",
-    "duration_ms": 30.818,
+    "duration_ms": 10.253,
     "expected": "Valid signature returns 200 s[] envelope; tampered signature returns 403",
     "actual": "Valid=200, Tampered=403",
     "evidence_file": "faz4_5_protocol_and_engine.json",
@@ -247,13 +247,13 @@
   },
   {
     "test_id": "MOCK-SIO4-06-DUAL-CHANNEL",
-    "timestamp": "2026-11-17T09:29:04.198998+00:00",
+    "timestamp": "2026-11-17T09:53:59.006192+00:00",
     "environment": "LOCAL_MOCK",
     "request_type": "DUAL_CHANNEL_HTTP_AND_SOCKETIO_V4",
     "response_code": "ALL_OK",
-    "duration_ms": 45.705,
+    "duration_ms": 27.222,
     "expected": "Guest login + EIO open + SIO 40{sid} + Ping/Pong + 'i' push dispatch + 41 disconnect succeed",
-    "actual": "{\"guest_login_ok\": true, \"eio_open_ok\": true, \"sio_connect_ok\": true, \"ping_pong_ok\": true, \"ping_rtt_ms\": 1.562, \"push_i_event_ok\": true, \"disconnect_ok\": true}",
+    "actual": "{\"guest_login_ok\": true, \"eio_open_ok\": true, \"sio_connect_ok\": true, \"ping_pong_ok\": true, \"ping_rtt_ms\": 0.727, \"push_i_event_ok\": true, \"disconnect_ok\": true}",
     "evidence_file": "faz4_5_protocol_and_engine.json",
     "passed": true,
     "details": {
@@ -261,18 +261,18 @@
       "eio_open_ok": true,
       "sio_connect_ok": true,
       "ping_pong_ok": true,
-      "ping_rtt_ms": 1.562,
+      "ping_rtt_ms": 0.727,
       "push_i_event_ok": true,
       "disconnect_ok": true
     }
   },
   {
     "test_id": "SIM-SCHEMA-07-ALL-EVENTS",
-    "timestamp": "2026-11-17T09:29:04.199011+00:00",
+    "timestamp": "2026-11-17T09:53:59.006223+00:00",
     "environment": "LOCAL_SIMULATION",
     "request_type": "JSON_SCHEMA_VALIDATION_7_EVENTS",
     "response_code": "7/7_VALID",
-    "duration_ms": 0.043,
+    "duration_ms": 0.133,
     "expected": "All HTTP/Server envelopes and 7 target event schemas validate against binary handler rules",
     "actual": "all_schemas_ok=True",
     "evidence_file": "faz4_5_protocol_and_engine.json",
@@ -324,11 +324,11 @@
   },
   {
     "test_id": "SIM-ENGINE-08-AKILLI-DIZ-OKEY-BIT",
-    "timestamp": "2026-11-17T09:29:04.199039+00:00",
+    "timestamp": "2026-11-17T09:53:59.006280+00:00",
     "environment": "LOCAL_SIMULATION",
     "request_type": "AKILLI_DIZ_AND_OKEY_ILE_BIT_28_SLOT",
     "response_code": "OK",
-    "duration_ms": 17.396,
+    "duration_ms": 532.611,
     "expected": "Akıllı Diz yields kalan_toplam=0 and Okey ile Bit produces 28-slot masaoyunbitir-oyunbitirbeta command",
     "actual": "kalan_toplam=0, bitentas=5",
     "evidence_file": "faz4_5_protocol_and_engine.json",
@@ -353,7 +353,9 @@
         "33-s-13",
         "5-k-5"
       ],
+      "non_destructive_preview_verified": true,
       "akilli_diz": {
+        "mode": "per",
         "melds": [
           [
             "1-k-1",
@@ -413,12 +415,116 @@
           "5"
         ]
       },
+      "akilli_diz_7_pairs": {
+        "mode": "cift",
+        "pairs": [
+          [
+            "1-k-1",
+            "54-k-1"
+          ],
+          [
+            "14-m-2",
+            "67-m-2"
+          ],
+          [
+            "27-s-3",
+            "80-s-3"
+          ],
+          [
+            "40-y-4",
+            "93-y-4"
+          ],
+          [
+            "10-k-10",
+            "63-k-10"
+          ],
+          [
+            "25-m-12",
+            "78-m-12"
+          ],
+          [
+            "53-o-0",
+            "106-o-0"
+          ]
+        ],
+        "melds": [
+          [
+            "1-k-1",
+            "54-k-1"
+          ],
+          [
+            "14-m-2",
+            "67-m-2"
+          ],
+          [
+            "27-s-3",
+            "80-s-3"
+          ],
+          [
+            "40-y-4",
+            "93-y-4"
+          ],
+          [
+            "10-k-10",
+            "63-k-10"
+          ],
+          [
+            "25-m-12",
+            "78-m-12"
+          ],
+          [
+            "53-o-0",
+            "106-o-0"
+          ]
+        ],
+        "cift_sayisi": 7,
+        "leftover": [],
+        "kalan_toplam": 0,
+        "rack_28": [
+          "1",
+          "54",
+          "Bos",
+          "14",
+          "67",
+          "Bos",
+          "27",
+          "80",
+          "Bos",
+          "40",
+          "93",
+          "Bos",
+          "10",
+          "63",
+          "25",
+          "78",
+          "Bos",
+          "53",
+          "106",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos",
+          "Bos"
+        ]
+      },
       "okey_ile_bit_command": {
         "taslar": "-1-2-3-Bos-14-15-16-Bos-27-40-66-20-Bos-Bos-30-31-32-33-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos",
         "bitentas": "5",
         "_i": "masaoyunbitir-oyunbitirbeta",
         "_t": "[REDACTED]"
-      }
+      },
+      "okey_ile_bit_7_pairs_command": {
+        "taslar": "-1-54-Bos-14-67-Bos-27-80-Bos-40-93-Bos-10-63-25-78-Bos-53-106-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos-Bos",
+        "bitentas": "58",
+        "_i": "masaoyunbitir-oyunbitirbeta",
+        "_t": "[REDACTED]"
+      },
+      "fake_okey_finish_rejected": true,
+      "mock_server_finish_event": "OyunBitir"
     }
   }
 ]
